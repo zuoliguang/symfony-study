@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ parent() }} {# 输出模板默认的信息 #}
+{% endblock %}
+
+{% block body %}
+
+    <p> This is an string from test.html.twig </p>
+
+    <hr>
+
+    <p> Data from controller : tip = {{ tip }} </p>
+
+    <hr>
+
+    <p> 循环判断数据输出 </p>
+	    {% for item in arr %}
+	    	{% if item.id%2==1 %}
+	    		<p>{{ item.id }}:{{ item.name }}</p>
+	    	{% else %}
+	    		<p>{{ item.id }}:{{ item.name|upper }}</p>
+	    	{% endif %}
+	    {% endfor %}
+
+	<hr>
+
+	<p> 循环判断数据输出 </p>
+	    {% for item in arr if item.id%2==1 %}
+	    		<p>{{ item.id }}:{{ item.name }}</p>
+	    	{% else %}
+	    		<p> 否则的部分内容不输出 </p>
+	    {% endfor %}
+
+	<hr>
+
+	<p>链接首页 <a href="{{ path('study_index') }}">Home</a></p>
+
+	<hr>
+
+	<p>链接 带参数的链接 <a href="{{ path('study_getinfo', {'id':3,'name':'zuoliguang','key':'路径测试'}) }}">测试</a></p>
+	图片：<img src="{{ asset('images/favicon.ico') }}" alt="Symfony!" />
+
+	<hr>
+
+	<p> 包容样式表和js文件 </p>
+	<link href="{{ asset('style/test.css') }}" rel="stylesheet" />
+	<script src="{{ asset('javascript/test.js') }}"></script>
+
+	<hr>
+
+	<p> 这是转义源代码 </p>
+	{{ description }}
+
+	<hr>
+
+	
+
+
+
+{% endblock %}
