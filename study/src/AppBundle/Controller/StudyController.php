@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Custom\MyController; // 自定义类
+use AppBundle\Entity\Member;
 
 /**
 * 学习类
@@ -132,23 +133,22 @@ class StudyController extends MyController
 	 */
 	public function user_addAction()
 	{
-		
-	}
+		// 创建模型类
+		$member = new Member();
 
-	/**
-	 * @Route("/study/user_del")
-	 */
-	public function user_delAction()
-	{
-		
-	}
+		// 设置属性
+		$member->setName('Zuoliguang');
+		$member->setAge(23);
+		$member->setTel('12345678901');
+		$member->setAddress('北京市测试地址');
+		$member->setExtInfo('这个只是一个测试信息11111');
 
-	/**
-	 * @Route("/study/user_update")
-	 */
-	public function user_updateAction()
-	{
-		
+		// 获取管理类
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($member); // 声明要存储的类
+		$em->flush(); // 项数据库添加数据
+
+		return new Response('Save new Member with id '.$member->getId());
 	}
 
 	/**
@@ -156,9 +156,80 @@ class StudyController extends MyController
 	 */
 	public function user_getAction()
 	{
+		$id = 2;
+		$member = $this->getDoctrine()->getRepository('AppBundle:Member')->find($id);
+
+		$member = $this->getDoctrine()->getRepository('AppBundle:Member')->findAll();
 		
+		$member = $this->getDoctrine()->getRepository('AppBundle:Member')->findByExtInfo('这个只是一个测试信息11111');
+		
+		$names = ['name'=>'aaa'];
+		$order = ['id'=>'DESC']; // 排序操作
+		$member = $this->getDoctrine()->getRepository('AppBundle:Member')->findOneBy($names);
+		$member = $this->getDoctrine()->getRepository('AppBundle:Member')->findBy($names);
+		$member = $this->getDoctrine()->getRepository('AppBundle:Member')->findBy($names, $order);
+		
+		header("Content-type:text/html;charset=utf-8");
+		echo '<pre>';
+		print_r($member);
+		echo '</pre>';
+		die();
 	}
 
+	/**
+	 * @Route("/study/user_update")
+	 */
+	public function user_updateAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$id = 3;
+		$member = $em->getRepository('AppBundle:Member')->find($id);
+
+		$member->setName('zlg');
+		$member->setAge(23);
+		$member->setTel('12345678901');
+		$member->setAddress('北京市测试地址');
+		$member->setExtInfo('这个只是一个测试信息3333');
+		$em->flush();
+		return new Response('修改结束');
+	}
+
+	/**
+	 * @Route("/study/user_del")
+	 */
+	public function user_delAction()
+	{
+		$id = 5;
+		$em = $this->getDoctrine()->getManager();
+		$member = $em->getRepository('AppBundle:Member')->find($id);
+		$em->remove($member);
+		$em->flush();
+		return new Response('删除结束');
+	}
+
+
+	/**
+	 * @Route("/study/user_sql")
+	 */
+	public function user_sqlAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		//1、自己写sql 注意：该位置的sql要使用symfony自己的sql语法规则
+		$sql = "SELECT m FROM AppBundle:Member m WHERE m.name = :name ORDER BY m.id DESC ";
+		$query = $em->createQuery($sql)->setParameter('name', 'bbb');
+		$member = $query->getResult();
+
+		// 2、构造器查询
+		$repository = $this->getDoctrine()->getRepository('AppBundle:Member');
+		$query = $repository->createQueryBuilder('m')->where('m.name = :name')->setParameter('name', 'ccc')->orderBy('m.id', 'DESC')->getQuery();
+		$member = $query->getResult();
+
+		header("Content-type:text/html;charset=utf-8");
+		echo '<pre>';
+		print_r($member);
+		echo '</pre>';
+		die();
+	}
 
 	// ---------------------------------------------------模板
 

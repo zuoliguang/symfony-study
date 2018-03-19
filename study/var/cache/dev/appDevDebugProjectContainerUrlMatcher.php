@@ -163,7 +163,35 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
             // app_study_datarequest
             if (0 === strpos($pathinfo, '/study/datarequest') && preg_match('#^/study/datarequest(?:/(?P<id>\\d+))?$#sD', $pathinfo, $matches)) {
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_study_datarequest')), array (  'id' => 1,  '_controller' => 'AppBundle\\Controller\\StudyController::datarequest',));
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'app_study_datarequest')), array (  'id' => 1,  '_controller' => 'AppBundle\\Controller\\StudyController::datarequestAction',));
+            }
+
+            if (0 === strpos($pathinfo, '/study/user_')) {
+                // app_study_user_add
+                if ('/study/user_add' === $pathinfo) {
+                    return array (  '_controller' => 'AppBundle\\Controller\\StudyController::user_addAction',  '_route' => 'app_study_user_add',);
+                }
+
+                // app_study_user_get
+                if ('/study/user_get' === $pathinfo) {
+                    return array (  '_controller' => 'AppBundle\\Controller\\StudyController::user_getAction',  '_route' => 'app_study_user_get',);
+                }
+
+                // app_study_user_update
+                if ('/study/user_update' === $pathinfo) {
+                    return array (  '_controller' => 'AppBundle\\Controller\\StudyController::user_updateAction',  '_route' => 'app_study_user_update',);
+                }
+
+                // app_study_user_del
+                if ('/study/user_del' === $pathinfo) {
+                    return array (  '_controller' => 'AppBundle\\Controller\\StudyController::user_delAction',  '_route' => 'app_study_user_del',);
+                }
+
+                // app_study_user_sql
+                if ('/study/user_sql' === $pathinfo) {
+                    return array (  '_controller' => 'AppBundle\\Controller\\StudyController::user_sqlAction',  '_route' => 'app_study_user_sql',);
+                }
+
             }
 
             // app_study_view
