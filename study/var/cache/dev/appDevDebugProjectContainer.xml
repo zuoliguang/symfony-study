@@ -3101,9 +3101,12 @@
         <argument key="dbname">test</argument>
         <argument key="user">root</argument>
         <argument key="password">123456</argument>
-        <argument key="charset">UTF8</argument>
+        <argument key="charset">utf8mb4</argument>
         <argument key="driverOptions" type="collection"/>
-        <argument key="defaultTableOptions" type="collection"/>
+        <argument key="defaultTableOptions" type="collection">
+          <argument key="charset">utf8mb4</argument>
+          <argument key="collate">utf8mb4_unicode_ci</argument>
+        </argument>
       </argument>
       <argument type="service" id="doctrine.dbal.default_connection.configuration"/>
       <argument type="service" id="doctrine.dbal.default_connection.event_manager"/>
@@ -3248,7 +3251,9 @@
     </service>
     <service id="doctrine.orm.default_configuration" class="Doctrine\ORM\Configuration" public="false">
       <call method="setEntityNamespaces">
-        <argument type="collection"/>
+        <argument type="collection">
+          <argument key="AppBundle">AppBundle\Entity</argument>
+        </argument>
       </call>
       <call method="setMetadataCacheImpl">
         <argument type="service" id="doctrine_cache.providers.doctrine.orm.default_metadata_cache"/>
@@ -3290,7 +3295,18 @@
         <argument type="service" id="doctrine.orm.container_repository_factory"/>
       </call>
     </service>
-    <service id="doctrine.orm.default_metadata_driver" class="Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain" public="false"/>
+    <service id="doctrine.orm.default_annotation_metadata_driver" class="Doctrine\ORM\Mapping\Driver\AnnotationDriver" public="false">
+      <argument type="service" id="annotations.cached_reader"/>
+      <argument type="collection">
+        <argument>D:\work\workplace\symfony-study\study\src\AppBundle\Entity</argument>
+      </argument>
+    </service>
+    <service id="doctrine.orm.default_metadata_driver" class="Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain" public="false">
+      <call method="addDriver">
+        <argument type="service" id="doctrine.orm.default_annotation_metadata_driver"/>
+        <argument>AppBundle\Entity</argument>
+      </call>
+    </service>
     <service id="doctrine_cache.providers.doctrine.orm.default_metadata_cache" class="Doctrine\Common\Cache\ArrayCache">
       <call method="setNamespace">
         <argument>sf_orm_default_51ea4b0ec0659fdb9fd11575a17b04ac90afc02c3d074700e28ea962b1f0fc91</argument>

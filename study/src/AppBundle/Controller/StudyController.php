@@ -91,7 +91,7 @@ class StudyController extends MyController
 	/**
 	 * @Route("/study/datarequest/{id}", requirements={"id": "\d+"})
 	 */
-	public function datarequest($id=1, Request $request)
+	public function datarequestAction($id=1, Request $request)
 	{
 		// 管理Session 
 		// $session = $request->getSession();
@@ -127,7 +127,37 @@ class StudyController extends MyController
 
 	// ---------------------------------------------------数据库
 
+	/**
+	 * @Route("/study/user_add")
+	 */
+	public function user_addAction()
+	{
+		
+	}
 
+	/**
+	 * @Route("/study/user_del")
+	 */
+	public function user_delAction()
+	{
+		
+	}
+
+	/**
+	 * @Route("/study/user_update")
+	 */
+	public function user_updateAction()
+	{
+		
+	}
+
+	/**
+	 * @Route("/study/user_get")
+	 */
+	public function user_getAction()
+	{
+		
+	}
 
 
 	// ---------------------------------------------------模板
