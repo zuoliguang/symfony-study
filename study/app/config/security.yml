@@ -2,10 +2,23 @@
 # https://symfony.com/doc/current/security.html
 security:
 
+    # 是用明文账号密码的方式
+    # 调取下面 memory 中的 admin/user 来登录
+    # 简单的账号登录机制
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
         in_memory:
-            memory: ~
+            memory:
+                users:
+                    admin:
+                        password: admin
+                        roles: 'ROLE_ADMIN'
+                    user:
+                        password: user
+                        roles: 'ROLE_USER'
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -13,8 +26,12 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        main:
+        # main:
+        #     anonymous: ~
+
+        default:
             anonymous: ~
+            http_basic: ~
             # activate different ways to authenticate
 
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
@@ -22,3 +39,7 @@ security:
 
             # https://symfony.com/doc/current/security/form_login_setup.html
             #form_login: ~
+            
+    access_control:
+        # require ROLE_ADMIN for /admin*
+        - { path: ^/admin, roles: ROLE_ADMIN }

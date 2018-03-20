@@ -107,6 +107,11 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
+        // app_admin_index
+        if ('/admin' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\AdminController::indexAction',  '_route' => 'app_admin_index',);
+        }
+
         // homepage
         if ('' === $trimmedPathinfo) {
             $ret = array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
